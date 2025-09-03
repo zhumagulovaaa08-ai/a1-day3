@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English with Mixlass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .header .nickname {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f97316;
+        }
+        .header .slogan {
+            font-size: 1rem;
+            color: #4b5563;
+            margin-top: 0.5rem;
+            letter-spacing: 0.1rem;
+        }
+        .task-section {
+            margin-bottom: 2.5rem;
+        }
+        .task-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f97316;
+            padding-bottom: 0.5rem;
+        }
+        .task-subtitle {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+        .question {
+            margin-bottom: 1.5rem;
+        }
+        .question p {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #1f2937;
+        }
+        .fill-in-the-blank {
+            display: inline-block;
+            width: 150px;
+            border-bottom: 1px dashed #9ca3af;
+            margin: 0 0.5rem;
+            text-align: center;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .input-group span {
+            margin-right: 0.75rem;
+            color: #4b5563;
+        }
+        input[type="text"] {
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            width: 100%;
+            max-width: 250px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus {
+            border-color: #f97316;
+        }
+        .answer-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        .answer-options label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: #4b5563;
+        }
+        .answer-options input[type="radio"] {
+            margin-right: 0.5rem;
+            accent-color: #f97316;
+        }
+        .chat-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            background-color: #f3f4f6;
+            margin-bottom: 2rem;
+        }
+        .chat-message {
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        .chat-message.left {
+            text-align: left;
+        }
+        .chat-message.right {
+            text-align: right;
+        }
+        .chat-bubble {
+            display: inline-block;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            max-width: 75%;
+            word-wrap: break-word;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        .chat-bubble.left {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            border-bottom-left-radius: 0;
+        }
+        .chat-bubble.right {
+            background-color: #f97316;
+            color: #fff;
+            border-bottom-right-radius: 0;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .results {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background-color: #fef3c7;
+            color: #92400e;
+            display: none;
+        }
+        .result-item {
+            margin-bottom: 0.5rem;
+        }
+        .correct {
+            color: #10b981;
+            font-weight: 600;
+        }
+        .incorrect {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        .explanation {
+            font-size: 0.875rem;
+            color: #374151;
+            margin-top: 0.25rem;
+        }
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #f3f4f6;
+        }
+        .btn {
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-check {
+            background-color: #f97316;
+            color: white;
+            border: none;
+        }
+        .btn-check:hover {
+            background-color: #ea580c;
+            transform: translateY(-2px);
+        }
+        .btn-reset {
+            background-color: #fff;
+            color: #f97316;
+            border: 2px solid #f97316;
+        }
+        .btn-reset:hover {
+            background-color: #fef3c7;
+            transform: translateY(-2px);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .custom-table th, .custom-table td {
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .custom-table th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+            color: #374151;
+        }
+        .custom-table td input[type="text"] {
+            border: none;
+            width: 100%;
+            background-color: transparent;
+            outline: none;
+            padding: 0;
+            font-size: 1rem;
+        }
+        .custom-table td {
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body class="bg-orange-100 flex items-center justify-center p-8">
+
+<div class="container">
+    <div class="header">
+        <div class="nickname">English with Mixlass</div>
+        <div class="slogan">LEARN.SHARE.CONNECT</div>
+    </div>
+    
+    <div class="task-section">
+        <div class="task-title">Countries and nationalities</div>
+        <div class="task-subtitle">2. Choose the correct word to complete the sentences.</div>
+
+        <div class="question" id="q1">
+            <p>1. Hi, I’m Tom. I’m <span class="fill-in-the-blank"></span>.</p>
+            <div class="answer-options">
+                <label><input type="radio" name="q1_options" value="the US"> the US</label>
+                <label><input type="radio" name="q1_options" value="American"> American</label>
+            </div>
+        </div>
+
+        <div class="question" id="q2">
+            <p>2. Are you from <span class="fill-in-the-blank"></span>?</p>
+            <div class="answer-options">
+                <label><input type="radio" name="q2_options" value="Turkey"> Turkey</label>
+                <label><input type="radio" name="q2_options" value="Turkish"> Turkish</label>
+            </div>
+        </div>
+
+        <div class="question" id="q3">
+            <p>3. Good morning. I’m Maxime. I’m from <span class="fill-in-the-blank"></span>.</p>
+            <div class="answer-options">
+                <label><input type="radio" name="q3_options" value="France"> France</label>
+                <label><input type="radio" name="q3_options" value="French"> French</label>
+            </div>
+        </div>
+
+        <div class="question" id="q4">
+            <p>4. I’m not British, I’m <span class="fill-in-the-blank"></span>.</p>
+            <div class="answer-options">
+                <label><input type="radio" name="q4_options" value="Australia"> Australia</label>
+                <label><input type="radio" name="q4_options" value="Australian"> Australian</label>
+            </div>
+        </div>
+
+        <div class="question" id="q5">
+            <p>5. Are you <span class="fill-in-the-blank"></span>?</p>
+            <div class="answer-options">
+                <label><input type="radio" name="q5_options" value="Brazilian"> Brazilian</label>
+                <label><input type="radio" name="q5_options" value="Brazil"> Brazil</label>
+            </div>
+        </div>
+
+        <div class="question" id="q6">
+            <p>6. Hey, I’m Ximena. I’m <span class="fill-in-the-blank"></span>.</p>
+            <div class="answer-options">
+                <label><input type="radio" name="q6_options" value="Mexican"> Mexican</label>
+                <label><input type="radio" name="q6_options" value="Mexico"> Mexico</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="task-section">
+        <div class="task-title">Read the chat messages. Complete the table.</div>
+        <div class="task-subtitle">8A</div>
+
+        <div class="chat-container">
+            <div class="chat-message left">
+                <div class="chat-bubble left">Hello everyone. I'm Ewa. I'm from Warsaw in Poland. Where are you from?</div>
+            </div>
+            <div class="chat-message right">
+                <div class="chat-bubble right">Hi Ewa, I'm Peter. I'm from Geneva in Switzerland.</div>
+            </div>
+            <div class="chat-message left">
+                <div class="chat-bubble left">Hello everyone, I'm Noemi. I'm also Swiss.</div>
+            </div>
+            <div class="chat-message right">
+                <div class="chat-bubble right">Really? Where are you from? Are you from Geneva?</div>
+            </div>
+            <div class="chat-message left">
+                <div class="chat-bubble left">No, I'm not. I'm from Zurich.</div>
+            </div>
+            <div class="chat-message right">
+                <div class="chat-bubble right">Hi, I'm Wang. I'm Chinese. I'm from Shanghai.</div>
+            </div>
+            <div class="chat-message left">
+                <div class="chat-bubble left">Hi Wang. Are you in China now?</div>
+            </div>
+            <div class="chat-message right">
+                <div class="chat-bubble right">No, I'm not. I'm in the UK.</div>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>name</th>
+                        <th>city</th>
+                        <th>country</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ewa</td>
+                        <td><input type="text" data-correct="Warsaw" class="table-input" id="table-input-1"></td>
+                        <td>Poland</td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" data-correct="Peter" class="table-input" id="table-input-2"></td>
+                        <td>Geneva</td>
+                        <td><input type="text" data-correct="Switzerland" class="table-input" id="table-input-3"></td>
+                    </tr>
+                    <tr>
+                        <td>Noemi</td>
+                        <td><input type="text" data-correct="Zurich" class="table-input" id="table-input-4"></td>
+                        <td>Switzerland</td>
+                    </tr>
+                    <tr>
+                        <td>Wang</td>
+                        <td><input type="text" data-correct="Shanghai" class="table-input" id="table-input-5"></td>
+                        <td><input type="text" data-correct="China" class="table-input" id="table-input-6"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div id="results" class="results"></div>
+
+    <div class="buttons-container">
+        <button class="btn btn-check" onclick="checkAnswers()">Проверить</button>
+        <button class="btn btn-reset" onclick="resetAnswers()">Сбросить</button>
+    </div>
+</div>
+
+<script>
+    // A function to normalize the answers for case-insensitive comparison
+    function normalizeAnswer(answer) {
+        if (typeof answer !== 'string') {
+            return '';
+        }
+        return answer.toLowerCase().replace(/[\s\p{P}]/gu, '');
+    }
+
+    // An object containing the correct answers and their explanations
+    const correctAnswers = {
+        'q1_options': { value: 'American', explanation: 'После "I\'m" (I am) используется прилагательное национальности, а не название страны.' },
+        'q2_options': { value: 'Turkey', explanation: '"from" используется с названием страны, а не национальностью.' },
+        'q3_options': { value: 'France', explanation: '"from" используется с названием страны, а не национальностью.' },
+        'q4_options': { value: 'Australian', explanation: 'После "I\'m" (I am) используется прилагательное национальности, а не название страны.' },
+        'q5_options': { value: 'Brazilian', explanation: '"Are you" используется с прилагательным национальности для вопроса о национальной принадлежности.' },
+        'q6_options': { value: 'Mexican', explanation: 'После "I\'m" (I am) используется прилагательное национальности, а не название страны.' },
+        'table-input-1': { value: 'Warsaw', explanation: 'Согласно тексту, Ewa из Warsaw.' },
+        'table-input-2': { value: 'Peter', explanation: 'По тексту, Peter из Geneva.' },
+        'table-input-3': { value: 'Switzerland', explanation: 'Peter из Geneva, Switzerland.' },
+        'table-input-4': { value: 'Zurich', explanation: 'Noemi говорит, что она не из Geneva, а из Zurich.' },
+        'table-input-5': { value: 'Shanghai', explanation: 'Согласно тексту, Wang из Shanghai, China.' },
+        'table-input-6': { value: 'China', explanation: 'Согласно тексту, Wang из Shanghai, China.' }
+    };
+
+    function checkAnswers() {
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = '';
+        resultsDiv.style.display = 'block';
+
+        let allCorrect = true;
+
+        // Check radio button answers for Task 2
+        for (let i = 1; i <= 6; i++) {
+            const groupName = `q${i}_options`;
+            const selectedRadio = document.querySelector(`input[name="${groupName}"]:checked`);
+            
+            const resultItem = document.createElement('div');
+            resultItem.classList.add('result-item');
+            const questionElement = document.getElementById(`q${i}`);
+            const questionText = questionElement.querySelector('p').innerText.trim().replace(/\n.*$/, '');
+
+            if (selectedRadio) {
+                const userAnswer = normalizeAnswer(selectedRadio.value);
+                const correctAnswer = normalizeAnswer(correctAnswers[groupName].value);
+                const explanation = correctAnswers[groupName].explanation;
+
+                if (userAnswer === correctAnswer) {
+                    resultItem.classList.add('correct');
+                    resultItem.innerHTML = `<span class="correct">✅ Правильно</span>: ${questionText} - Ваш ответ: "${selectedRadio.value}"`;
+                } else {
+                    allCorrect = false;
+                    resultItem.classList.add('incorrect');
+                    resultItem.innerHTML = `<span class="incorrect">❌ Ошибка</span>: ${questionText}<br><span class="explanation">Ваш ответ: "${selectedRadio.value}", Правильный ответ: "${correctAnswers[groupName].value}"<br>${explanation}</span>`;
+                }
+            } else {
+                allCorrect = false;
+                resultItem.classList.add('incorrect');
+                resultItem.innerHTML = `<span class="incorrect">❌ Ошибка</span>: ${questionText}<br><span class="explanation">Вы не выбрали ответ.</span>`;
+            }
+            resultsDiv.appendChild(resultItem);
+        }
+
+        // Check text input answers for Task 8A
+        const inputs = document.querySelectorAll('.table-input');
+        inputs.forEach(input => {
+            const userAnswer = normalizeAnswer(input.value);
+            const correctAnswer = normalizeAnswer(correctAnswers[input.id].value);
+            const explanation = correctAnswers[input.id].explanation;
+            
+            const resultItem = document.createElement('div');
+            resultItem.classList.add('result-item');
+            
+            const tableRow = input.closest('tr');
+            let questionText = '';
+            tableRow.querySelectorAll('td').forEach(td => {
+                 if (td.innerText.trim() !== '') {
+                    questionText += td.innerText.trim() + ' ';
+                 }
+            });
+            // Fallback for the first cell if it's an input
+            if (questionText === '') {
+                 questionText = `Поле ${input.id.replace('table-input-', '')}`;
+            }
+
+            if (userAnswer === correctAnswer) {
+                resultItem.classList.add('correct');
+                resultItem.innerHTML = `<span class="correct">✅ Правильно</span>: ${questionText} - Ваш ответ: "${input.value}"`;
+            } else {
+                allCorrect = false;
+                resultItem.classList.add('incorrect');
+                resultItem.innerHTML = `<span class="incorrect">❌ Ошибка</span>: ${questionText}<br><span class="explanation">Ваш ответ: "${input.value}", Правильный ответ: "${correctAnswers[input.id].value}"<br>${explanation}</span>`;
+            }
+            resultsDiv.appendChild(resultItem);
+        });
+
+        if (allCorrect) {
+            resultsDiv.innerHTML = '<div class="text-lg font-bold text-center text-green-600">🎉 Все ответы верны! Отличная работа!</div>';
+        }
+    }
+
+    function resetAnswers() {
+        const inputs = document.querySelectorAll('input[type="text"]');
+        inputs.forEach(input => {
+            input.value = '';
+        });
+        const radios = document.querySelectorAll('input[type="radio"]');
+        radios.forEach(radio => {
+            radio.checked = false;
+        });
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = '';
+        resultsDiv.style.display = 'none';
+    }
+
+</script>
+
+</body>
+</html>
